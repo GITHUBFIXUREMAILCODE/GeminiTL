@@ -1,0 +1,4 @@
+lxml
+pytesseract
+requests
+vertexai
