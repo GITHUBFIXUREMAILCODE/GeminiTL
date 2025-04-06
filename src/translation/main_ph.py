@@ -1,12 +1,14 @@
+# main_ph.py
+
 import re
 import os
 from .glossary import build_glossary
 from .translator import TLer
 from .image_ocr import replace_image_tags_with_ocr
-from .proofing import verify_translations
+from .proofing import proof_all_files
 
 # Ensure input/ and output/ folders exist
-script_dir = os.path.dirname(os.path.abspath(__file__))  # This points to src/translation
+script_dir = os.path.dirname(os.path.abspath(__file__))  # Points to src/translation
 control_script_dir = os.path.dirname(os.path.dirname(script_dir))  # Move up twice to main dir
 input_dir = os.path.join(control_script_dir, "input")   # Points to 'input/' next to ControlScript.py
 output_dir = os.path.join(control_script_dir, "output") # Points to 'output/' next to ControlScript.py
@@ -110,6 +112,17 @@ def translate_in_batches(log_message):
                 log_message(f"[ERROR processing {fname}]: {e}")
 
 def main(log_message):
+    # Path for the non-English detection log
+    non_english_log_path = os.path.join(control_script_dir, "non_english_detected.txt")
+
+    # STEP 0) Clear the non-English log file before starting
+    try:
+        with open(non_english_log_path, "w", encoding="utf-8"):
+            pass
+        log_message("[INFO] Cleared non_english_detected.txt.")
+    except Exception as e:
+        log_message(f"[ERROR] Failed to clear non_english_detected.txt: {e}")
+
     # 1) First pass: glossary
     log_message("Starting first pass: building glossary from all chapters.")
     build_glossary_in_batches(log_message)
@@ -120,18 +133,12 @@ def main(log_message):
     translate_in_batches(log_message)
     log_message("Translation pass is complete.\n")
 
-    # 3) Third pass: verify we have only English characters in output
-    log_message("Starting third pass: verifying translations for non-English chars.")
-
-    error_log_path = os.path.join(control_script_dir, "error.txt")  
-    image_dir = os.path.join(input_dir, "images")
-    
-    verify_translations(
+    # 3) Third pass: proofing (both non-English detection and gender pronoun correction)
+    log_message("Starting third pass: proofing translated files.")
+    proof_all_files(
         log_message=log_message,
-        input_dir=input_dir,
         output_dir=output_dir,
-        error_log_path=error_log_path,
-        image_dir=image_dir
+        log_file_path=non_english_log_path,
+        input_dir=input_dir
     )
-
-    log_message("Verification pass is complete.")
+    log_message("Proofing pass is complete.")

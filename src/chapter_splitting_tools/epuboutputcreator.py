@@ -50,7 +50,9 @@ def create_epub(output_dir, epub_name, image_dir=None):
     spine_items = []
     toc_items = []
 
-    image_files = set()
+    # Track all images found in the directory and which ones are used
+    all_image_files = set()
+    used_image_files = set()
 
     # Regex patterns
     image_placeholder_pattern = re.compile(r'\[IMAGE:.*?\]', re.IGNORECASE)
@@ -63,12 +65,15 @@ def create_epub(output_dir, epub_name, image_dir=None):
         img_name = match.group(1).strip()
         alt_text = match.group(2) if match.group(2) else "Embedded Image"
         if image_dir:
-            image_files.add(img_name)
+            used_image_files.add(img_name)
             alt_text_escaped = escape_special_chars(alt_text)
+            # Remove any existing 'images/' prefix to avoid duplication
+            img_name = img_name.replace('images/', '')
             return f'<img src="images/{img_name}" alt="{alt_text_escaped}"/>'
         else:
             return ""
 
+    # First pass: process all chapters and track used images
     for i, text_file in enumerate(text_files, start=1):
         chapter_id = f"chapter{i}"
         xhtml_filename = f"{chapter_id}.xhtml"
@@ -83,6 +88,13 @@ def create_epub(output_dir, epub_name, image_dir=None):
 
         # Replace <image> placeholders with proper <img> tags
         content = re.sub(newstyle_pattern, replace_newstyle_placeholder, content)
+
+        # Fix any remaining image paths that don't have the images/ prefix
+        content = re.sub(
+            r'<img\s+[^>]*src\s*=\s*"(?!images/)([^"]+)"',
+            lambda m: m.group(0).replace(f'src="{m.group(1)}"', f'src="images/{m.group(1)}"'),
+            content
+        )
 
         lines = content.splitlines()
         xhtml_body = []
@@ -114,9 +126,44 @@ def create_epub(output_dir, epub_name, image_dir=None):
         spine_items.append(f'<itemref idref="{chapter_id}" />')
         toc_items.append(f'<navPoint id="{chapter_id}" playOrder="{i}"><navLabel><text>Chapter {i}</text></navLabel><content src="{xhtml_filename}"/></navPoint>')
 
-    if image_dir and image_files:
+    # Get all available images if image_dir exists
+    if image_dir:
+        all_image_files = {f.name for f in image_dir.glob("*") if f.suffix.lower() in {".jpg", ".jpeg", ".png", ".gif", ".svg"}}
+        unused_images = all_image_files - used_image_files
+
+        # Create Illustrations chapter if there are unused images
+        if unused_images:
+            illustrations_id = "illustrations"
+            illustrations_filename = f"{illustrations_id}.xhtml"
+            illustrations_path = temp_dir / "EPUB" / illustrations_filename
+
+            # Create HTML content for illustrations
+            illustrations_content = """<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Illustrations</title>
+  </head>
+  <body>
+    <h1>Illustrations</h1>
+"""
+            for img_name in sorted(unused_images):
+                illustrations_content += f'    <p><img src="images/{img_name}" alt="Illustration"/></p>\n'
+            illustrations_content += "  </body>\n</html>"
+
+            with open(illustrations_path, "w", encoding="utf-8") as f:
+                f.write(illustrations_content)
+
+            # Add to manifest, spine, and TOC
+            manifest_items.append(f'<item id="{illustrations_id}" href="{illustrations_filename}" media-type="application/xhtml+xml"/>')
+            spine_items.append(f'<itemref idref="{illustrations_id}" />')
+            toc_items.append(f'<navPoint id="{illustrations_id}" playOrder="{len(text_files) + 1}"><navLabel><text>Illustrations</text></navLabel><content src="{illustrations_filename}"/></navPoint>')
+
+    # Copy all images to EPUB
+    if image_dir and (used_image_files or unused_images):
         os.makedirs(temp_dir / "EPUB/images", exist_ok=True)
-        for img_name in image_files:
+        for img_name in used_image_files | unused_images:
             src_img_path = image_dir / img_name
             if not src_img_path.exists():
                 print(f"[WARNING] Missing image: {img_name}")
@@ -166,9 +213,13 @@ def create_epub(output_dir, epub_name, image_dir=None):
 
     epub_path = epub_dir / epub_name
     with zipfile.ZipFile(epub_path, "w") as epub:
+        # First add mimetype file uncompressed
         epub.write(mimetype_path, "mimetype", compress_type=zipfile.ZIP_STORED)
+        
+        # Then add all other files
         for path in temp_dir.rglob("*"):
-            epub.write(path, path.relative_to(temp_dir))
+            if path.name != "mimetype":  # Skip mimetype as it's already added
+                epub.write(path, path.relative_to(temp_dir))
 
     shutil.rmtree(temp_dir)
     print(f"EPUB created: {epub_path}")

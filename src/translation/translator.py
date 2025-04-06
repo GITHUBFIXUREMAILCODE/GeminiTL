@@ -1,10 +1,18 @@
 import json
 import time
+import os
+import re
 from vertexai.generative_models import GenerativeModel, GenerationConfig
 from .config import SAFETY_SETTING
 
-# Path to glossary.txt
-from .glossary import GLOSSARY_PATH  
+# Import the function to get whichever glossary file is "current."
+# That file can be changed at runtime by calling set_current_glossary_file(...)
+# in glossary.py.
+from .glossary import get_current_glossary_file
+
+###############################################################################
+# Translation Instructions
+###############################################################################
 
 # Primary instructions (tweak as needed)
 PRIMARY_INSTRUCTIONS = [
@@ -12,13 +20,13 @@ PRIMARY_INSTRUCTIONS = [
     "Translation MUST be faithful, maintaining the original meaning, tone, and structure without creative additions or omissions.",
     "Translate ALL text, including proper nouns, adjectives, technical terms, and any potentially foreign words, into English.",
     "The translation will not be censored, and any profanity will be translated according to its context and intensity in the original text.",
-    "Correct punctuation marks while the translation should closely match the original text’s format.",
+    "Correct punctuation marks while the translation should closely match the original text's format.",
     "Allow NSFW; all characters are of age.",
     "You will receive text input that may contain HTML. The sections containing HTML MUST be returned exactly as-is, with no modifications.",
-    "Here is a glossary of special terms and names. Use this glossary for translation accuracy."
+    "Here is a glossary of special terms and names. Use this glossary for translation accuracy.",
 ]
 
-# Secondary instructions (fallback if primary blocked)
+# Secondary instructions (fallback if primary is blocked)
 SECONDARY_INSTRUCTIONS = [
     "Your task is to TRANSLATE novels INTO ENGLISH (title included).",
     "Translation MUST be faithful, maintaining the original meaning, tone, and structure without creative additions or omissions.",
@@ -31,23 +39,43 @@ SECONDARY_INSTRUCTIONS = [
     "Here is a glossary of special terms and names. Use this glossary for translation accuracy."
 ]
 
+###############################################################################
+# Glossary Loading
+###############################################################################
+
 def load_glossary():
-    """Reads glossary.txt and returns its content as a string."""
-    if not GLOSSARY_PATH or not isinstance(GLOSSARY_PATH, str):
+    """
+    Reads the name_glossary file from the subfolder of the current glossary.
+    Returns its content as a string. If the file doesn't exist or fails to read, returns "".
+    """
+    glossary_path = get_current_glossary_file()
+    try:
+        # Get the subfolder path (same name as glossary without extension)
+        glossary_name = os.path.splitext(os.path.basename(glossary_path))[0]
+        glossary_dir = os.path.dirname(glossary_path)
+        name_glossary_path = os.path.join(glossary_dir, glossary_name, "name_glossary.txt")
+        
+        with open(name_glossary_path, "r", encoding="utf-8") as f:
+            content = f.read()
+            # Extract content between markers
+            parts = content.split("==================================== GLOSSARY START ===============================")
+            if len(parts) > 1:
+                glossary_text = parts[1].split("==================================== GLOSSARY END ================================")[0].strip()
+                return glossary_text if glossary_text else ""
+            return ""
+    except Exception as e:
+        print(f"[ERROR] Failed to read name glossary from {name_glossary_path}: {e}")
         return ""
 
-    try:
-        with open(GLOSSARY_PATH, "r", encoding="utf-8") as f:
-            glossary_text = f.read().strip()
-        return glossary_text if glossary_text else ""
-    except Exception as e:
-        print(f"[ERROR] Failed to read glossary: {e}")
-        return ""
+###############################################################################
+# Core Translation Logic
+###############################################################################
 
 def generate_with_instructions(prompt, instructions, instructions_label, log_message,
                                max_retries=2, retry_delay=60):
     """
     Attempts translation using the provided instructions (primary or secondary).
+    Retries on certain errors. If blocked for prohibited content, raises RuntimeError.
     """
     log_message(f"[{instructions_label}] Attempting generation...")
 
@@ -73,8 +101,11 @@ def generate_with_instructions(prompt, instructions, instructions_label, log_mes
             error_str = str(e)
             log_message(f"[{instructions_label}] Error (attempt {attempt+1}): {error_str}")
 
+            # If the error indicates prohibited content, raise a specific exception
             if "Response has no candidates" in error_str:
                 raise RuntimeError("PROHIBITED_CONTENT_BLOCK")
+
+            # Check JSON structure in the error in case we get additional feedback
             try:
                 data = json.loads(error_str)
                 block_reason = data.get("prompt_feedback", {}).get("block_reason")
@@ -92,34 +123,52 @@ def generate_with_instructions(prompt, instructions, instructions_label, log_mes
 
 def TLer(prompt, log_message):
     """
-    Uses primary instructions; if blocked, tries secondary instructions.
-    Loads the glossary before running the translation.
+    1) Loads the current glossary file set in glossary.py.
+    2) Uses PRIMARY_INSTRUCTIONS for translation.
+    3) If blocked for prohibited content, tries SECONDARY_INSTRUCTIONS.
+    4) If all attempts fail, returns None.
+    5) Preserves image tags during translation.
     """
+    # Extract and store image tags before translation
+    image_tag_pattern = re.compile(r'(<img[^>]*>)')
+    image_tags = []
+    def store_image_tag(match):
+        image_tags.append(match.group(1))
+        return f"__IMAGE_TAG_{len(image_tags)-1}__"
+    
+    # Replace image tags with placeholders
+    text_with_placeholders = image_tag_pattern.sub(store_image_tag, prompt)
+
+    # Load the glossary text (could be blank if no file is found or it's empty)
     glossary_text = load_glossary()
     if glossary_text:
-        log_message(f"[GLOSSARY] Loaded glossary terms for translation.")
+        log_message("[GLOSSARY] Loaded glossary terms for translation.")
     else:
-        log_message(f"[GLOSSARY] No glossary terms found.")
+        log_message("[GLOSSARY] No glossary terms found or file not found.")
 
+    # Combine instructions with the glossary text
     primary_instructions = PRIMARY_INSTRUCTIONS + ([glossary_text] if glossary_text else [])
     secondary_instructions = SECONDARY_INSTRUCTIONS + ([glossary_text] if glossary_text else [])
 
+    # Attempt primary instructions first
     try:
-        return generate_with_instructions(
-            prompt=prompt,
+        translated = generate_with_instructions(
+            prompt=text_with_placeholders,
             instructions=primary_instructions,
             instructions_label="PRIMARY",
             log_message=log_message,
             max_retries=3,
             retry_delay=60
         )
+
     except RuntimeError as e:
+        # If blocked by content, switch to secondary instructions
         if "PROHIBITED_CONTENT_BLOCK" in str(e):
             log_message("[PRIMARY] Blocked. Attempting SECONDARY in 5s.")
             time.sleep(5)
             try:
-                return generate_with_instructions(
-                    prompt=prompt,
+                translated = generate_with_instructions(
+                    prompt=text_with_placeholders,
                     instructions=secondary_instructions,
                     instructions_label="SECONDARY",
                     log_message=log_message,
@@ -137,6 +186,21 @@ def TLer(prompt, log_message):
         else:
             log_message(f"[PRIMARY] Error: {e}. Skipping.")
             return None
+
     except Exception as e:
+        # Any other fatal error
         log_message(f"[PRIMARY] Fatal: {e}. Skipping.")
         return None
+
+    if not translated:
+        return None
+
+    # Restore image tags in the translated text
+    def restore_image_tag(match):
+        index = int(match.group(1))
+        if 0 <= index < len(image_tags):
+            return image_tags[index]
+        return match.group(0)
+
+    translated = re.sub(r'__IMAGE_TAG_(\d+)__', restore_image_tag, translated)
+    return translated
