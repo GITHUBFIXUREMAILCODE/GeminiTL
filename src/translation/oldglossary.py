@@ -3,7 +3,7 @@ import time
 import re
 from vertexai.generative_models import GenerativeModel, GenerationConfig
 from .config import SAFETY_SETTING
-from .context_aware_glossary import split_glossary
+
 ###############################################################################
 # Adjustable Glossary File Paths
 ###############################################################################
@@ -21,9 +21,6 @@ def set_current_glossary_file(custom_path):
     """
     global CURRENT_GLOSSARY_PATH
     CURRENT_GLOSSARY_PATH = custom_path
-    
-    # Ensure the file exists
-    ensure_glossary_exists(custom_path)
 
 def get_current_glossary_file():
     """
@@ -41,8 +38,7 @@ def ensure_glossary_exists(glossary_filename):
     """
     if not os.path.exists(glossary_filename):
         with open(glossary_filename, "w", encoding="utf-8") as f:
-            f.write("==================================== GLOSSARY START ===============================\n")
-            f.write("==================================== GLOSSARY END =================================\n")
+            f.write("")
         print(f"[GLOSSARY] Created new file: {glossary_filename}")
 
 def normalize_term(term):
@@ -66,7 +62,7 @@ def build_glossary(input_text, log_message, glossary_filename=None,
     currently selected at runtime). Otherwise, we create/use the specified path.
 
     The model is instructed to output lines of the form:
-        Non-English => ENGLISH => Gender Pronoun
+        Non-English => ENGLISH
     or:
         No named entities found.
 
@@ -80,22 +76,10 @@ def build_glossary(input_text, log_message, glossary_filename=None,
     # Ensure the file exists first
     ensure_glossary_exists(glossary_filename)
 
-    # Load existing glossary entries from the file
-    existing_glossary = []
-    if os.path.exists(glossary_filename):
-        with open(glossary_filename, "r", encoding="utf-8") as f:
-            content = f.read()
-            # Split content by markers and get the middle section
-            parts = content.split("==================================== GLOSSARY START ===============================")
-            if len(parts) > 1:
-                middle = parts[1].split("==================================== GLOSSARY END ================================")[0]
-                existing_glossary = [line for line in middle.splitlines() if line.strip()]
-
     GLOSSARY_INSTRUCTIONS = [
         "Extract a glossary of Non-English proper nouns (places, people, unique terms) from the given text.",
-        "For each unique Non-English term, provide a recommended English translation and gender pronoun ONLY.",
-        "Output only lines of the form: Non-English => English => Gender Pronoun, with proper capitalization.",
-        "Gender pronouns should be one of: he/him, she/her, they/them, or it/its.",
+        "For each unique Non-English term, provide a recommended English translation.",
+        "Output only lines of the form: Non-English => English, Gender pronouns with proper capitalization.",
         "If no named entities are found, write: No named entities found."
     ]
 
@@ -128,32 +112,38 @@ def build_glossary(input_text, log_message, glossary_filename=None,
                 log_message("[GLOSSARY] No new terms found.")
                 return ""
 
-            # Parse the AI response to extract glossary entries (Non-English => ENGLISH => Gender Pronoun)
+            # Parse the AI response to extract glossary entries (Non-English => ENGLISH)
             glossary_entries = []
             for line in new_glossary.split("\n"):
                 parts = line.split("=>")
-                if len(parts) == 3:  # Now expecting 3 parts
+                if len(parts) == 2:
                     term = parts[0].strip()
                     meaning = parts[1].strip()
-                    gender = parts[2].strip()
-                    glossary_entries.append(f"{term} => {meaning} => {gender}")
+                    glossary_entries.append(f"{term} => {meaning}")
 
             if not glossary_entries:
                 log_message("[GLOSSARY] No valid glossary terms extracted.")
                 return ""
 
+            # Load existing glossary entries from the file
+            if os.path.exists(glossary_filename):
+                with open(glossary_filename, "r", encoding="utf-8") as f:
+                    existing_glossary = f.read().splitlines()
+            else:
+                existing_glossary = []
+
             # Build a set of normalized terms already in the glossary
             existing_original_terms = set()
             for entry in existing_glossary:
                 parts = entry.split("=>")
-                if len(parts) == 3:  # Now expecting 3 parts
+                if len(parts) == 2:
                     existing_original_terms.add(normalize_term(parts[0]))
 
             # Determine which entries are new
             updated_entries = []
             for entry in glossary_entries:
                 parts = entry.split("=>")
-                if len(parts) == 3:  # Now expecting 3 parts
+                if len(parts) == 2:
                     term = parts[0].strip()
                     if normalize_term(term) not in existing_original_terms:
                         updated_entries.append(entry)
@@ -165,36 +155,8 @@ def build_glossary(input_text, log_message, glossary_filename=None,
             if updated_entries:
                 log_message(f"[DEBUG] Writing {len(updated_entries)} new terms to {glossary_filename}")
                 try:
-                    # Read the current content
-                    with open(glossary_filename, "r", encoding="utf-8") as f:
-                        content = f.read()
-                    
-                    # Split content by markers
-                    parts = content.split("==================================== GLOSSARY START ===============================")
-                    if len(parts) > 1:
-                        middle = parts[1].split("==================================== GLOSSARY END ================================")[0]
-                        # Combine existing and new entries
-                        all_entries = [line for line in middle.splitlines() if line.strip()] + updated_entries
-                        # Remove duplicates while preserving order
-                        seen = set()
-                        unique_entries = []
-                        for entry in all_entries:
-                            if entry not in seen:
-                                seen.add(entry)
-                                unique_entries.append(entry)
-                        
-                        # Write back with markers
-                        with open(glossary_filename, "w", encoding="utf-8") as f:
-                            f.write("==================================== GLOSSARY START ===============================\n")
-                            f.write("\n".join(unique_entries) + "\n")
-                            f.write("==================================== GLOSSARY END ================================\n")
-                    else:
-                        # If markers are missing, write new content with markers
-                        with open(glossary_filename, "w", encoding="utf-8") as f:
-                            f.write("==================================== GLOSSARY START ===============================\n")
-                            f.write("\n".join(updated_entries) + "\n")
-                            f.write("==================================== GLOSSARY END ================================\n")
-                    
+                    with open(glossary_filename, "a", encoding="utf-8") as f:
+                        f.write("\n".join(updated_entries) + "\n")
                     log_message(f"[GLOSSARY] Updated {glossary_filename} with {len(updated_entries)} new terms.")
                 except Exception as e:
                     log_message(f"[ERROR] Failed to write {glossary_filename}: {e}")
@@ -208,13 +170,6 @@ def build_glossary(input_text, log_message, glossary_filename=None,
                     log_message(f"[ERROR] Failed to verify written glossary: {e}")
             else:
                 log_message(f"[GLOSSARY] No new terms to add to {glossary_filename}; all extracted terms are duplicates.")
-
-            # Automatically split the glossary into name/context parts
-            try:
-                split_glossary(glossary_filename)
-                log_message("[GLOSSARY] Successfully split glossary into name/context files.")
-            except Exception as e:
-                log_message(f"[GLOSSARY] Failed to split glossary: {e}")
 
             # Return the combined (existing + new) glossary
             return "\n".join(existing_glossary + updated_entries)

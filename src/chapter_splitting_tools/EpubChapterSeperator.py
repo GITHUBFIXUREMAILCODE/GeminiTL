@@ -2,6 +2,7 @@
 import os
 import zipfile
 from lxml import etree
+from lxml import html  # <-- Added
 import argparse
 
 # XML namespaces used by EPUB
@@ -20,7 +21,7 @@ def get_opf_path(epub_path):
         container_xml = z.read("META-INF/container.xml")
         container_tree = etree.fromstring(container_xml)
         rootfile_elem = container_tree.xpath("/u:container/u:rootfiles/u:rootfile",
-                                               namespaces=namespaces)[0]
+                                             namespaces=namespaces)[0]
         return rootfile_elem.get("full-path")
 
 def extract_images(epub_path, opf_path, manifest_items, images_output_dir):
@@ -46,31 +47,42 @@ def extract_images(epub_path, opf_path, manifest_items, images_output_dir):
                 print(f"[DEBUG] Extracted image: {basename}")
 
     return image_map
-    
+
 def extract_text_with_placeholders(elem):
+    """
+    Extracts text from an XHTML/HTML element, preserving minimal block spacing
+    (paragraphs, line breaks) and replacing inline images with placeholders.
+    """
     parts = []
 
-    # Grab any leading text on the parent
-    if elem.text:
-        parts.append(elem.text)
+    # 1) Grab any text from the element itself (before child elements)
+    if elem.text and elem.text.strip():
+        parts.append(elem.text.strip())
 
-    # Iterate over child nodes
+    # 2) Process each child node in order
     for child in elem:
-        # 1) If it's a comment or processing instruction, skip it
+        # If it's a comment or not an actual element, skip it, but keep trailing text
         if not hasattr(child, "tag") or not isinstance(child.tag, str):
-            # We can still append child.tail if it exists
-            if child.tail:
-                parts.append(child.tail)
+            if child.tail and child.tail.strip():
+                parts.append(child.tail.strip())
             continue
 
-        # 2) If it is an element, then do the normal checks
-        localname = etree.QName(child).localname
-        if localname == "img":
+        localname = etree.QName(child).localname.lower()
+
+        if localname == "br":
+            # Insert a single newline
+            parts.append("\n")
+        elif localname in ["p", "div"]:
+            # Treat as block-level: insert two newlines, then recurse
+            parts.append("\n\n" + extract_text_with_placeholders(child))
+        elif localname == "img":
+            # Inline image placeholder
             src = child.get("src")
             if src:
                 basename = os.path.basename(src)
                 parts.append(f'<image src="{basename}" alt="Embedded Image"/>')
         elif localname == "svg":
+            # SVG may contain <image> elements
             svg_imgs = child.xpath(".//*[local-name()='image']")
             for simg in svg_imgs:
                 href = simg.get("{http://www.w3.org/1999/xlink}href") or simg.get("href")
@@ -78,14 +90,16 @@ def extract_text_with_placeholders(elem):
                     basename = os.path.basename(href)
                     parts.append(f'<image src="{basename}" alt="Embedded SVG Image"/>')
         else:
-            # Recurse
+            # For other elements, recurse normally
             parts.append(extract_text_with_placeholders(child))
 
-        # 3) Append any trailing text
-        if child.tail:
-            parts.append(child.tail)
+        # 3) Append any tail text (after the child tag)
+        if child.tail and child.tail.strip():
+            parts.append(child.tail.strip())
 
-    return "".join(parts)
+    # 4) Join everything with a space—this ensures pieces remain separated
+    #    but also preserves the newlines we inserted above.
+    return " ".join(parts)
 
 def split_text_by_bytes(text, max_bytes):
     """Splits extracted text into smaller parts if it exceeds max_bytes."""
@@ -104,8 +118,9 @@ def split_text_by_bytes(text, max_bytes):
         parts.append(current_text.strip())
     return parts
 
-def extract_chapters(epub_path, opf_path, manifest_items, spine_ids, image_map, output_dir, max_bytes=MAX_BYTE_LIMIT):
-    """Extracts XHTML chapters and inserts image placeholders in document order."""
+def extract_chapters(epub_path, opf_path, manifest_items, spine_ids, image_map,
+                     output_dir, max_bytes=MAX_BYTE_LIMIT):
+    """Extracts XHTML/HTML chapters and inserts image placeholders in document order."""
     os.makedirs(output_dir, exist_ok=True)
 
     # Map spine IDs to manifest items
@@ -129,24 +144,24 @@ def extract_chapters(epub_path, opf_path, manifest_items, spine_ids, image_map, 
                 continue
 
             try:
-                doc_tree = etree.fromstring(doc_data)
-            except etree.XMLSyntaxError as e:
+                # Option 2: use lxml.html.fromstring for HTML-like content
+                doc_tree = html.fromstring(doc_data)
+            except Exception as e:
                 print(f"[ERROR] Could not parse {in_zip_path}: {e}")
                 continue
 
-            # Try to locate the <body> element.
-            body_elem = doc_tree.find(".//xhtml:body", namespaces=namespaces)
+            # Since we're parsing as HTML, look for a <body> without namespace
+            body_elem = doc_tree.find(".//body")
             if body_elem is not None:
                 extracted_text = extract_text_with_placeholders(body_elem).strip()
             else:
                 extracted_text = ""
 
-            # Use a robust check to see if there are any image (or svg) elements anywhere in the document.
+            # Use a robust check to see if there are any <img> or <svg> anywhere
             images_found = doc_tree.xpath("//*[local-name()='img'] | //*[local-name()='svg']")
             if not extracted_text and images_found:
                 extracted_text = "[IMAGE ONLY CHAPTER]"
 
-            # Only skip the chapter if there is no text and no images.
             if not extracted_text:
                 print(f"[DEBUG] Skipping empty chapter: {item['href']}")
                 continue
@@ -154,8 +169,7 @@ def extract_chapters(epub_path, opf_path, manifest_items, spine_ids, image_map, 
             byte_size = len(extracted_text.encode("utf-8"))
             print(f"[DEBUG] Chapter {i} extracted, size: {byte_size} bytes")
 
-            # Instead of appending the suffix for the entire chapter based on images found,
-            # we now check each output part individually.
+            # If chapter text is too large, split into multiple parts
             if byte_size > max_bytes:
                 parts = split_text_by_bytes(extracted_text, max_bytes)
                 for j, part in enumerate(parts, 1):
