@@ -1,336 +1,383 @@
-import tkinter as tk
-from tkinter import filedialog
-import subprocess
-import sys
-import io
+"""
+Control script for the novel translation tool.
+
+This script provides a GUI interface for managing the translation workflow,
+including file selection, translation execution, and outp   ut management.
+"""
+
 import os
+import sys
 import shutil
+import tkinter as tk
+from tkinter import filedialog, messagebox, ttk
+from typing import Optional, Callable, List
 import threading
-import html
-import datetime
-import re
+from datetime import datetime
 
-# Add src/ to Python's module search path
-script_dir = os.path.dirname(os.path.abspath(__file__))
-src_path = os.path.join(script_dir, "src")
-sys.path.append(src_path)
-
-# --- CHAPTER SPLITTING TOOLS IMPORTS ---
-from src.chapter_splitting_tools.NovelSplit import TextSplitterApp
-import src.chapter_splitting_tools.EpubChapterSeperator as EpubChapterSeperator
-from src.chapter_splitting_tools.OutputTextCombine import concatenate_files
-
-# --- TRANSLATION IMPORTS ---
-from src.translation.main_ph import main as run_translation
-# We import glossary so we can set / get the current glossary path
-import src.translation.glossary as glossary_module
-from src.translation.ocr_fail_detection import main as run_ocr_fail_detection
-
-# Directory paths
-script_directory = os.path.dirname(os.path.abspath(__file__))
-input_folder = os.path.join(script_directory, "input")
-output_folder = os.path.join(script_directory, "output")
-error_log_path = os.path.join(script_directory, "error.txt")
+# Add src directory to Python path
+src_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "src")
+if src_path not in sys.path:
+    sys.path.append(src_path)
+# Import from the new package structure
+from translation import main as translation_main
+from chapter_splitting_tools.epub_separator import EPUBSeparator
+from chapter_splitting_tools.novel_splitter import TextSplitterApp
+from chapter_splitting_tools.output_combiner import OutputCombiner
+from chapter_splitting_tools.folder_manager import FolderManager
 
 class ControlScriptApp:
+    """
+    Main application class for the control script.
+    
+    This class provides a GUI interface for:
+    - Selecting input files and glossaries
+    - Running translations
+    - Managing output files
+    - Handling chapter splitting and combining
+    """
+    
     def __init__(self, root):
+        """
+        Initialize the application.
+        
+        Args:
+            root: The root Tkinter window
+        """
+        from threading import Event
+
+        # Thread control flags
+        self.pause_event = Event()
+        self.pause_event.set()  # Unpaused by default
+        self.cancel_requested = False
+
         self.root = root
-        self.root.title("Control Script")
-        self.root.geometry("600x500")
-        self.translation_in_progress = False
-
-        # Buttons
-        tk.Button(root, text="Run Novel Splitter", 
-                  command=self.run_novel_splitter).pack(fill="x", pady=5)
-        tk.Button(root, text="Run EPUB Chapter Separator", 
-                  command=self.run_epub_separator).pack(fill="x", pady=5)
-        tk.Button(root, text="Run Output Text Combiner / EPUB Creator", 
-                  command=self.run_output_combiner_or_epub).pack(fill="x", pady=5)
-        tk.Button(root, text="Run Translation", 
-                  command=self.run_translation_button).pack(fill="x", pady=5)
-        tk.Button(root, text="Clear Folders", 
-                  command=self.run_clear_folders).pack(fill="x", pady=5)
-
-        # Log output text box
-        self.log_text = tk.Text(root, height=15, width=70, state="disabled")
-        self.log_text.pack(padx=10, pady=10)
-
-    def log_message(self, message):
-        """Append a message to the log text box."""
-        self.log_text.config(state="normal")
-        self.log_text.insert(tk.END, f"{message}\n")
-        self.log_text.see(tk.END)
-        self.log_text.config(state="disabled")
-
-    # -------------------------------------------------------------------------
-    # 1) Novel Splitter
-    # -------------------------------------------------------------------------
-    def run_novel_splitter(self):
-        splitter_window = tk.Toplevel(self.root)
-        TextSplitterApp(splitter_window)
-        self.log_message("Novel Splitter launched.")
-
-    # -------------------------------------------------------------------------
-    # 2) EPUB Chapter Separator
-    # -------------------------------------------------------------------------
-    def run_epub_separator(self):
-        epub_files = filedialog.askopenfilenames(
-            title="Select EPUB file(s)",
-            filetypes=[("EPUB files", "*.epub")]
-        )
-        if not epub_files:
-            self.log_message("Error: No EPUB files selected.")
-            return
-
-        for epub_file in epub_files:
-            try:
-                epub_name = os.path.basename(epub_file)
-                output_subfolder = os.path.join(input_folder, epub_name)
-                os.makedirs(output_subfolder, exist_ok=True)
-                EpubChapterSeperator.main(epub_file, output_subfolder, 30000)
-                self.log_message(
-                    f"EPUB Chapter Separator completed.\n"
-                    f"Input: {epub_file}\n"
-                    f"Output -> {output_subfolder}"
-                )
-            except Exception as e:
-                self.log_message(f"[ERROR run_epub_separator] {epub_file} => {e}")
-
-    # -------------------------------------------------------------------------
-    # 3) Output Text Combiner / EPUB Creator
-    # -------------------------------------------------------------------------
-    def run_output_combiner_or_epub(self):
-        def on_selection(selection):
-            if selection == "Cancel":
-                combiner_window.destroy()
-                return
-
-            if selection == "Concatenate":
-                output_file = filedialog.asksaveasfilename(
-                    title="Save Combined Output As",
-                    defaultextension=".txt",
-                    initialdir=script_directory,
-                    initialfile="combined_output.txt"
-                )
-                if not output_file:
-                    self.log_message("Error: No output file selected.")
-                    return
-                try:
-                    concatenate_files(
-                        folder_name=output_folder, 
-                        output_file=output_file, 
-                        break_text="\n---\n", 
-                        save_as_epub=False
-                    )
-                    self.log_message(f"Combined text saved to {output_file}.")
-                except Exception as e:
-                    self.log_message(f"[ERROR combining] {e}")
-
-            elif selection == "EPUB":
-                epub_name = filedialog.asksaveasfilename(
-                    title="Save EPUB As",
-                    defaultextension=".epub",
-                    initialdir=script_directory,
-                    initialfile="generated.epub"
-                )
-                if not epub_name:
-                    self.log_message("Error: No EPUB file selected.")
-                    return
-                try:
-                    concatenate_files(
-                        folder_name=output_folder, 
-                        output_file=epub_name, 
-                        break_text="\n---\n", 
-                        save_as_epub=True
-                    )
-                    self.log_message(f"EPUB created at {epub_name}.")
-                except Exception as e:
-                    self.log_message(f"[ERROR creating EPUB] {e}")
-
-            combiner_window.destroy()
-
-        combiner_window = tk.Toplevel(self.root)
-        combiner_window.title("Select Operation")
-        combiner_window.geometry("300x150")
-
-        tk.Label(combiner_window, text="Choose an operation:", font=("Arial", 14)).pack(pady=10)
-        tk.Button(combiner_window, text="Concatenate",
-                  command=lambda: on_selection("Concatenate")).pack(fill="x", pady=5, padx=10)
-        tk.Button(combiner_window, text="EPUB",
-                  command=lambda: on_selection("EPUB")).pack(fill="x", pady=5, padx=10)
-        tk.Button(combiner_window, text="Cancel",
-                  command=lambda: on_selection("Cancel")).pack(fill="x", pady=5, padx=10)
-
-    # -------------------------------------------------------------------------
-    # 4) Run Translation
-    # -------------------------------------------------------------------------
-    def run_translation_button(self):
-        """
-        1) Prompt the user to choose a glossary file (optional).
-        2) Prompt user to select a folder inside 'input'.
-        3) Move all files from that folder into 'input/'.
-        4) Optionally split large files.
-        5) Run the translation pipeline in a separate thread.
-        6) Run OCR fail detection.
-        7) Check for missing chapters.
-        """
-        if self.translation_in_progress:
-            self.log_message("Translation is currently running. Please wait.")
-            return
-
-        # 1) Prompt user to select a glossary file
-        glossary_py_dir = os.path.dirname(os.path.abspath(glossary_module.__file__))
-        self.log_message("Please select a glossary .txt file (or click cancel to use the default).")
-
-        chosen_glossary = filedialog.askopenfilename(
-            title="Select a glossary .txt file",
-            initialdir=glossary_py_dir,
-            filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")]
-        )
-
-        if chosen_glossary:
-            self.log_message(f"Using custom glossary file: {chosen_glossary}")
-            glossary_module.set_current_glossary_file(chosen_glossary)
-        else:
-            # If user cancels, revert to the default path
-            self.log_message("No glossary file chosen. Using default glossary path.")
-            glossary_module.set_current_glossary_file(glossary_module.DEFAULT_GLOSSARY_PATH)
-
-        # 2) Prompt user for a subfolder of 'input/'
-        selected_dir = filedialog.askdirectory(
-            title="Select a folder inside 'input' to use for translation",
-            initialdir=input_folder
-        )
-        if not selected_dir:
-            self.log_message("No folder selected. Translation canceled.")
-            return
-
-        selected_dir = os.path.normpath(selected_dir)
-        input_folder_norm = os.path.normpath(input_folder)
+        self.root.title("Novel Translation Tool")
+        self.root.geometry("800x600")
         
-        # Convert both paths to lowercase and use the same path separator
-        selected_dir_lower = selected_dir.lower().replace('\\', '/')
-        input_folder_lower = input_folder_norm.lower().replace('\\', '/')
+        # Create main frame
+        self.main_frame = tk.Frame(root)
+        self.main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
-        if not selected_dir_lower.startswith(input_folder_lower):
-            self.log_message(f"Selected folder is not inside 'input' folder. Translation canceled.\nSelected: {selected_dir}\nInput folder: {input_folder_norm}")
-            return
+        # Create text area with scrollbar
+        self.text_frame = tk.Frame(self.main_frame)
+        self.text_frame.pack(fill=tk.BOTH, expand=True)
+        
+        self.text_area = tk.Text(self.text_frame, wrap=tk.WORD, height=20)
+        self.text_area.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        
+        scrollbar = tk.Scrollbar(self.text_frame, command=self.text_area.yview)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.text_area.config(yscrollcommand=scrollbar.set)
+        
+        # Create button frame
+        self.button_frame = tk.Frame(self.main_frame)
+        self.button_frame.pack(fill=tk.X, pady=10)
+        
+        # Create buttons
+        self.create_buttons()
+        
+        # Initialize state
+        self.input_folder = None
+        self.glossary_file = None
+        self.skip_to_proofing    = tk.BooleanVar(value=False)
+        self.skip_to_translation = tk.BooleanVar(value=False)
 
-        # 3) Move all contents from the chosen folder up into 'input/'
+        # Checkbox to skip straight to Phase 3 (Proofing only)
+        self.skip_proofing_checkbox = tk.Checkbutton(
+            self.button_frame,
+            text="Skip to Proofing Only (Phase 3)",
+            variable=self.skip_to_proofing
+        )
+        self.skip_proofing_checkbox.pack(side=tk.LEFT, padx=5)
+
+        # Checkbox to skip glossary building (Phase 1) – Start at Translation
+        self.skip_translation_checkbox = tk.Checkbutton(
+            self.button_frame,
+            text="Skip to Translation (Phase 2)",
+            variable=self.skip_to_translation
+        )
+        self.skip_translation_checkbox.pack(side=tk.LEFT, padx=5)
+
+
+        
+        # Create default folders if they don't exist
+        self.create_default_folders()
+        
+    def create_default_folders(self):
+        """Create default folders if they don't exist."""
+        folders = [
+            "input",
+            "translation",
+            os.path.join("translation", "glossary"),
+            "output"
+        ]
+        
+        for folder in folders:
+            if not os.path.exists(folder):
+                os.makedirs(folder)
+                self.log_message(f"Created folder: {folder}")
+        
+    def create_buttons(self):
+        """Create and configure the control buttons."""
+        # Translation button
+        self.translate_button = tk.Button(
+            self.button_frame,
+            text="Run Translation",
+            command=self.run_translation
+        )
+        self.translate_button.pack(side=tk.LEFT, padx=5)
+        
+        # Split button
+        self.split_button = tk.Button(
+            self.button_frame,
+            text="Split Chapters",
+            command=self.show_splitter_dialog
+        )
+        self.split_button.pack(side=tk.LEFT, padx=5)
+        
+        # Combine button
+        self.combine_button = tk.Button(
+            self.button_frame,
+            text="Combine Output",
+            command=self.run_output_combiner
+        )
+        self.combine_button.pack(side=tk.LEFT, padx=5)
+        
+        # Clear button
+        self.clear_button = tk.Button(
+            self.button_frame,
+            text="Clear Folders",
+            command=self.clear_folders
+        )
+        self.clear_button.pack(side=tk.LEFT, padx=5)
+
+        self.pause_button = tk.Button(self.button_frame, text="Pause", command=self.toggle_pause)
+        self.pause_button.pack(side=tk.LEFT, padx=5)
+
+        self.stop_button = tk.Button(self.button_frame, text="Stop", command=self.stop_translation)
+        self.stop_button.pack(side=tk.LEFT, padx=5)
+
+        
+    def log_message(self, *args) -> None:
+        """Log a message with a timestamp to the text area, or fallback to stdout."""
+        timestamp = datetime.now().strftime("[%H:%M:%S]")
+        message = f"{timestamp} " + " ".join(str(arg) for arg in args)
         try:
-            for item in os.listdir(selected_dir):
-                src_path = os.path.join(selected_dir, item)
-                dest_path = os.path.join(input_folder, item)
-                shutil.move(src_path, dest_path)
-            self.log_message(f"Moved contents from {selected_dir} -> {input_folder}")
-        except Exception as move_err:
-            self.log_message(f"[ERROR moving contents]: {move_err}")
-            return
-
-        # 4) If you have a "split_large_files.py", run it
-        splitter_script = os.path.join(script_directory, "src", "chapter_splitting_tools", "split_large_files.py")
-        if os.path.exists(splitter_script):
-            try:
-                result = subprocess.run(
-                    ["python", splitter_script, input_folder, "--max-bytes", "30000"],
-                    capture_output=True, text=True
-                )
-                self.log_message(f"File splitting completed.\n{result.stdout}")
-                if result.stderr:
-                    self.log_message(f"[ERROR in splitter] {result.stderr}")
-            except subprocess.CalledProcessError as e:
-                self.log_message(f"Error while running split_large_files.py: {e}")
-                return
-        else:
-            self.log_message("split_large_files.py not found. (Skipping split step.)")
-
-        # 5) Run translation in a separate thread
-        self.translation_in_progress = True
-
-        def translation_thread():
-            try:
-                # Run the main translation process
-                run_translation(self.log_message)
-                self.log_message(f"Translation completed. Files -> {output_folder}.")
-
-                # 6) Run OCR fail detection
-                self.run_ocr_fail_detection()
-
-                # 7) Check for missing chapters
-                self.check_for_missing_chapters()
-
-            except Exception as e:
-                self.log_message(f"Translation Error: {e}")
-            finally:
-                self.translation_in_progress = False
-
-        threading.Thread(target=translation_thread, daemon=True).start()
-
-    def run_ocr_fail_detection(self):
-        try:
-            output_capture = io.StringIO()
-            sys.stdout = output_capture
-            run_ocr_fail_detection()
-            sys.stdout = sys.__stdout__
-            self.log_message(output_capture.getvalue())
-        except Exception as e:
-            sys.stdout = sys.__stdout__
-            self.log_message(f"OCR Fail Detection Error: {e}")
-
-    def check_for_missing_chapters(self):
-        try:
-            expected_chapters = set()
-            for fname in os.listdir(input_folder):
-                if fname.endswith(".txt"):
-                    cnum = self.extract_chapter_number(fname)
-                    if cnum is not None:
-                        expected_chapters.add(cnum)
-
-            actual_chapters = set()
-            for fname in os.listdir(output_folder):
-                if fname.startswith("translated_") and fname.endswith(".txt"):
-                    cnum = self.extract_chapter_number(fname)
-                    if cnum is not None:
-                        actual_chapters.add(cnum)
-
-            missing_chapters = expected_chapters - actual_chapters
-            if missing_chapters:
-                timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                with open(error_log_path, "a", encoding="utf-8") as error_log:
-                    error_log.write(f"\n[{timestamp}] Missing Chapters: {sorted(missing_chapters)}\n")
-                self.log_message(f"Warning: Missing Chapters detected: {sorted(missing_chapters)}")
+            if self.text_area and self.text_area.winfo_exists():
+                self.text_area.insert(tk.END, message + "\n")
+                self.text_area.see(tk.END)
+                self.text_area.update_idletasks()
             else:
-                self.log_message("All chapters were successfully translated.")
-        except Exception as e:
-            self.log_message(f"Error checking for missing chapters: {e}")
-
-    def extract_chapter_number(self, filename):
-        match = re.search(r'(\d+)', filename)
-        return int(match.group(1)) if match else None
-
-    # -------------------------------------------------------------------------
-    # 5) Clear Folders
-    # -------------------------------------------------------------------------
-    def run_clear_folders(self):
-        if self.translation_in_progress:
-            self.log_message("Translation is running. Cannot clear folders now.")
-            return
-
-        clear_folders_script = os.path.join(script_directory, "src", "chapter_splitting_tools", "ClearFolders.py")
-        if not os.path.exists(clear_folders_script):
-            self.log_message("Error: ClearFolders.py not found.")
-            return
-
+                print("[LOG fallback]", message)
+        except tk.TclError:
+            print("[LOG exception]", message)
+        
+    def select_glossary_file(self) -> Optional[str]:
+        """Prompt user to select a glossary file from src/translation."""
+        # Get the absolute path of the directory where ControlScript.py is located
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        default_dir = os.path.join(script_dir, "src", "translation")
+        
+        file_path = filedialog.askopenfilename(
+            title="Select Glossary File",
+            initialdir=default_dir,
+            filetypes=[("Text files", "*.txt")]
+        )
+        
+        if file_path:
+            self.glossary_file = file_path
+            self.log_message(f"Selected glossary: {os.path.basename(file_path)}")
+            return file_path
+        return None
+        
+    def select_input_folder(self) -> Optional[str]:
+        """Prompt user to select an input folder."""
+        folder_path = filedialog.askdirectory(
+            title="Select Input Folder",
+            initialdir="input"
+        )
+        if folder_path:
+            self.input_folder = folder_path
+            self.log_message(f"Selected input folder: {os.path.basename(folder_path)}")
+        return folder_path
+        
+    def move_files_to_input(self, source_folder: str) -> None:
+        """Move files from source folder to input folder."""
         try:
-            subprocess.run(["python", clear_folders_script], check=True)
-            self.log_message("Clear Folders operation completed.")
-        except subprocess.CalledProcessError as e:
-            self.log_message(f"Error while running ClearFolders.py: {e}")
+            for filename in os.listdir(source_folder):
+                source_path = os.path.join(source_folder, filename)
+                dest_path = os.path.join("input", filename)
+                shutil.move(source_path, dest_path)
+                self.log_message(f"Moved {filename} to input folder")
         except Exception as e:
-            self.log_message(f"Unexpected error: {e}")
+            self.log_message(f"Error moving files: {str(e)}")
+            raise
+            import threading
+
+    def run_translation(self) -> None:
+        """Run the translation process in a background thread to keep the GUI responsive."""
+        # Disable the translation button to prevent multiple clicks
+        self.translate_button.config(state=tk.DISABLED)
+        self.log_message("Starting translation...")
+
+        # Prompt for input folder if not already selected.
+        input_folder = self.select_input_folder()
+        if not input_folder:
+            self.log_message("No input folder selected. Aborting translation.")
+            self.translate_button.config(state=tk.NORMAL)
+            return
+        self.move_files_to_input(input_folder)
 
 
-if __name__ == "__main__":
+        # Prompt for glossary file selection if not already selected
+        self.glossary_file = self.select_glossary_file()
+        if not self.glossary_file:
+            # User cancelled the selection; create a new glossary file.
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            new_glossary_path = os.path.join(script_dir, "src", "translation", "default_glossary.txt")
+            with open(new_glossary_path, "w", encoding="utf-8") as f:
+                f.write("# Default glossary file\n")
+            self.glossary_file = new_glossary_path
+            self.log_message("No glossary file selected. Created new glossary at", new_glossary_path)
+
+        # Create a worker function to run the translation process.
+        def worker():
+            try:
+                from translation.main_ph import main as translation_main
+                proofing_only = self.skip_to_proofing.get()
+                skip_phase1 = self.skip_to_translation.get()
+
+                translation_main(
+                    log_message=self.log_message,
+                    glossary_file=self.glossary_file,
+                    proofing_only=proofing_only,
+                    skip_phase1=skip_phase1,
+                    pause_event=self.pause_event,
+                    cancel_flag=lambda: self.cancel_requested  # pass as callable
+                )
+
+            except Exception as e:
+                self.log_message(f"Error during translation: {str(e)}")
+            finally:
+                self.root.after(0, lambda: self.translate_button.config(state=tk.NORMAL))
+                self.root.after(0, lambda: self.log_message("Translation finished or aborted."))
+                self.pause_event.set()  # Ensure it's unpaused next time
+                self.cancel_requested = False
+                self.pause_button.config(text="Pause")            
+        threading.Thread(target=worker, daemon=True).start()
+
+    def show_splitter_dialog(self) -> None:
+        """Show dialog to select between Novel Splitter and EPUB Separator."""
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Select Splitter Type")
+        dialog.geometry("300x150")
+        
+        def run_novel_splitter():
+            dialog.destroy()
+            self.run_novel_splitter()
+            
+        def run_epub_separator():
+            dialog.destroy()
+            self.run_epub_separator()
+            
+        tk.Label(dialog, text="Select splitter type:").pack(pady=10)
+        tk.Button(dialog, text="Novel Splitter", command=run_novel_splitter).pack(pady=5)
+        tk.Button(dialog, text="EPUB Separator", command=run_epub_separator).pack(pady=5)
+            
+    def run_novel_splitter(self) -> None:
+        """Run the novel splitting process."""
+        try:
+            self.log_message("\nStarting novel splitting...")
+            splitter = TextSplitterApp(tk.Toplevel(self.root))
+            self.log_message("Novel splitting completed")
+            
+        except Exception as e:
+            self.log_message(f"Error during novel splitting: {str(e)}")
+            messagebox.showerror("Error", str(e))
+            
+    def run_epub_separator(self) -> None:
+        """Run the EPUB separation process."""
+        try:
+            # Select EPUB file
+            epub_file = filedialog.askopenfilename(
+                title="Select EPUB File",
+                filetypes=[("EPUB files", "*.epub")]
+            )
+            if not epub_file:
+                return
+                
+            # Get EPUB filename without extension
+            epub_name = os.path.splitext(os.path.basename(epub_file))[0]
+            
+            # Create input subdirectory with EPUB name
+            input_subdir = os.path.join("input", epub_name)
+            os.makedirs(input_subdir, exist_ok=True)
+            
+            # Run separator directly on the selected EPUB file
+            self.log_message("\nStarting EPUB separation...")
+            separator = EPUBSeparator(self.log_message)
+            separator.separate(epub_file, input_subdir)
+            self.log_message("EPUB separation completed")
+            
+        except Exception as e:
+            self.log_message(f"Error during EPUB separation: {str(e)}")
+            messagebox.showerror("Error", str(e))
+            
+    def run_output_combiner(self) -> None:
+        """Run the output combining process."""
+        try:
+            # Select input directory
+            input_dir = filedialog.askdirectory(
+                title="Select Input Directory",
+                initialdir="output"
+            )
+            if not input_dir:
+                return
+                
+            # Create combiner
+            self.log_message("\nStarting output combination...")
+            combiner = OutputCombiner(self.log_message)
+            combiner.show_save_dialog(input_dir)
+            self.log_message("Output combination completed")
+            
+        except Exception as e:
+            self.log_message(f"Error during combination: {str(e)}")
+            messagebox.showerror("Error", str(e))
+            
+    def clear_folders(self) -> None:
+        """Use FolderManager's GUI to select and clear folders with confirmation."""
+        try:
+            from chapter_splitting_tools.folder_manager import FolderManager
+            manager = FolderManager(self.log_message)
+            manager.show_clear_dialog()
+        except Exception as e:
+            self.log_message(f"Error clearing folders: {str(e)}")
+            messagebox.showerror("Error", str(e))
+    
+    def toggle_pause(self):
+        if self.pause_event.is_set():
+            self.pause_event.clear()
+            self.log_message("[CONTROL] Paused after current chapter.")
+            self.pause_button.config(text="Resume")
+        else:
+            self.pause_event.set()
+            self.log_message("[CONTROL] Resumed.")
+            self.root.after(0, lambda: self.pause_button.config(text="Pause"))
+
+    def stop_translation(self):
+        self.cancel_requested = True
+        self.pause_event.set()  # Force release if paused
+        self.log_message("[CONTROL] Stop requested. Will stop after current chapter.")
+
+
+
+def main() -> None:
+    """Main entry point for the control script."""
     root = tk.Tk()
     app = ControlScriptApp(root)
     root.mainloop()
+
+if __name__ == "__main__":
+    main()
+
+
