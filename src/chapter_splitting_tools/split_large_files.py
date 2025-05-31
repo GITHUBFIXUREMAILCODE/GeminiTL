@@ -2,7 +2,7 @@
 import os
 import argparse
 
-def split_text_by_bytes(text, max_bytes=30000):
+def split_text_by_bytes(text, max_bytes=20000):
     """
     Splits text into chunks each under max_bytes while ensuring splits happen at line boundaries.
     """

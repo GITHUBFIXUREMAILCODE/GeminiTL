@@ -1,0 +1,244 @@
+==================================== GLOSSARY START ===============================
+2ch => 2channel (Japanese textboard) => it/its
+アルト => Alto => he/him
+魔族 => Demon Race => they/them
+魔王 => Demon Lord => he/him
+ドラ〇エ => Dragon Quest => it/its
+ファ〇ナルファンタジー => Final Fantasy => it/its
+アルト様 => Alto-sama => he/him
+駄剣士 => Worthless Swordsman => he/him
+フィオ => Fio => she/her
+バーディ => Birdie => he/him
+ルート => Route => he/him
+フィオミクアル => Fio Mikuaru => she/her
+とりまる様 => Torimaru-sama => they/them
+土人形 => Earth Golem => it/its
+オレ => I => he/him
+パルメ => Parme => she/her
+No.1 => Number One => it/its
+魔王軍 => Demon King's Army => it/its
+勇者 => Hero => he/him
+聖痕 => Stigmata => it/its
+土人形 ( ゴーレム ) => Clay Figure (Golem) => it/its
+バーディ ( 槍使い ) => Bardy (Spear User) => he/him
+ルート ( ナビゲーター ) => Route (Navigator) => he/him
+ユリィ => Yurii => she/her
+リン => Rin => she/her
+マーミャ => Marmya => she/her
+レイ => Rei => she/her
+王都 => Royal Capital => it/its
+神域の剣 => Divine Sword => it/its
+修道女 => Sister => she/her
+レイさん => Rei-san => they/them
+20G => 20G => it/its
+50G => 50G => it/its
+マーミャさん => Maamya-san => she/her
+女狐 => Female Fox => she/her
+-chan => -chan => it/its
+-sama => -sama => it/its
+四人娘 => Four Daughters => they/them
+星読み => Astrology => it/its
+魔将軍 => Demon General => he/him
+王宮 => Royal Palace => it/its
+Aruto => Aruto => he/him
+Birdie => Birdie => he/him
+Fio => Fio => she/her
+Yurii => Yurii => she/her
+-san => -san => gender neutral
+魔王軍討伐の旅 => Demon Lord subjugation journey => it/its
+勇者アルト => Hero Alto => he/him
+白魔道服 => White magic robe => it/its
+回復術士 => Healing mage => they/them
+死神殺し => Death god killer => it/its
+大魔王パルメちゃん => Great Demon King Palme-chan => she/her
+アッパー => Upper => it/its
+アッパーガーデン => Upper Garden => it/its
+Alto => Alto => he/him
+Upper Garden => Upper Garden => it/its
+Royal Capital => Royal Capital => it/its
+Root-tachi => Root and others => they/them
+Royal Palace => Royal Palace => it/its
+アジト => Hideout => it/its
+Fio-san => Fio-san => he/him
+Yully => Yully => she/her
+Rei => Rei => she/her
+Marmya => Marmya => she/her
+Routo => Routo => he/him
+Lin => Lin => she/her
+クリハさん => Kuriha-san => she/her
+オーク => Orc => it/its
+Fio Mikuaru => Fio Mikuaru => she/her
+Baadii => Buddy => he/him
+Maou gun => Demon Army => it/its
+国王 => King => he/him
+クリハ => Kuriha => she/her
+僕の家族 => My Family => they/them
+夏 => Summer => it/its
+猿 => Monkey => it/its
+村長 (ボス) => Village Chief (Boss) => he/him
+水よ散れ (ミスト) => Water Scatter (Mist) => it/its
+ミクアルの里 => Mikuaru Village => it/its
+エクス・ヒール (ふざけんな畜生) => Ex Heal (Don't Mess With Me, Bastard) => it/its
+勇者様 => Honorable Hero(es) => they/them
+精霊の導き手 => Guide of the Spirits => it/its
+流星の巫女 => Shooting Star Shrine Maiden => she/her
+星落とし (メテオ ) => Starfall (Meteor) => it/its
+フィオ様 => Lord Fio => he/him
+修道女 (ユリィ) => Nun (Yurii) => she/her
+リア => Ria => she/her
+日本 => Japan => it/its
+旧魔族 => Old Demon Clan => they/them
+バルトリフ => Bartrif => he/him
+魔公 => Demon Duke => it/its
+前王国 => Former Kingdom => it/its
+裏切りのバルトリフ => Bartrif the Betrayer => he/him
+前王朝 => Previous Dynasty => it/its
+現魔王 => Current Demon King => he/him
+レイネ => Reine => she/her
+前魔王 => Previous Demon King => he/him
+とうさん => Father => he/him
+人族 => Human Race => it/its
+魔族の描いた絵(おもいで) => Demon-drawn Picture (Memories) => it/its
+大車輪 => Great Wheel => it/its
+ポークビッツ => Pork Bits => it/its
+メル => Meru => she/her
+タイマン => One-on-one fight => it/its
+フィーユ姉さん => Fiyu-neesan => she/her
+流星の秘術 => Meteor Secret Art => it/its
+村長 => Village Chief => he/him
+筋肉達磨 => Muscle Daruma => it/its
+ミクアルの一族 => Mikuaru Clan => it/its
+族長 => Clan Chief => he/him
+継承の祠 => Inheritance Shrine => it/its
+巫女服 => Shrine Maiden Outfit => it/its
+司祭様 => Priest-sama => he/him
+ラント => Ranto => he/him
+魔偽裂殴打 => Magic Fake Split Strike => it/its
+バーディ様 => Birdie-sama => he/him
+司祭 => Priest => it/its
+ボス => Boss => he/him
+フィーユ => Feuille => she/her
+ミクアル => Mikuaru => it/its
+ゼア・グロッセ・ブラスタ => Zea Grosse Blasta => it/its
+ジェニファー => Jennifer => she/her
+アルカディア => Arcadia => it/its
+ジェニファーちゃん => Jennifer-chan => she/her
+暗殺者 (クリハ) => Assassin (Kuriha) => they/them
+鼓動 (ビート) => Beat (heartbeat) => it/its
+左右対称性 (シンメトリー) => Symmetry => it/its
+コボルト => Kobold => it/its
+聖書・友誼の章 => Bible, Chapter of Friendship => it/its
+本格黒魔術論・基本は物理に有り => Serious Treatise on Black Magic - The Basics Lie in Physics => it/its
+ひと夏の淫夢・男色勇者編～アルト×バーディ～ => A Midsummer's Lewd Dream: The Male-Loving Hero Edition ~Alto x Birdie~ => it/its
+クリハ-san => Kuriha-san => she/her
+フィーユ姉 => Feiyu nee-san => she/her
+ローシャさん => Rosha-san => she/her
+西の自治区 => Western Autonomous Region => it/its
+軍神 ( ボス ) => God of War (Boss) => he/him
+ハイ・ヒール => High Heel => it/its
+蜃気楼爆弾 ( ミラージュボム ) => Mirage Bomb => it/its
+フィオの里 => Fio's Village => it/its
+ゴブリン => Goblin => it/its
+自治区 => Autonomous Region => it/its
+ローシャ => Rosha => she/her
+聖女 => Saint => she/her
+父 => Father => he/him
+父zan => Father-zan (familiar, possibly childish honorific) => he/him
+Kobold => Kobold => it/its
+Kingdom Army => Kingdom Army => it/its
+Bardie => Bardie => he/him
+Root => Root => he/him
+Mikuar Autonomous Region => Mikuar Autonomous Region => it/its
+Lant => Lant => he/him
+Feue => Feue => she/her
+-kun => -kun => it/its
+Village Chief => Village Chief => he/him
+Jennifer-san => Jennifer-san => she/her
+Great Whirlwind => Great Whirlwind => it/its
+Feuille-san => Feuille-san => she/her
+Mikuaru Village => Mikuaru Village => it/its
+Mel => Mel => she/her
+Great Cliff Inn => Great Cliff Inn => it/its
+ジェニファーさん => Jennifer-san => she/her
+村長殿 => Village Chief-dono => he/him
+大天空 => Great Sky => it/its
+神域の槍技 => Divine Spear Technique => it/its
+ユリィ嬢ちゃん => Yurii-jochan => she/her
+輪形陣 => Circular Formation => it/its
+魚鱗陣 => Fish Scale Formation => it/its
+雁行陣 => Flying Geese Formation => it/its
+王都軍 => Royal Capital Army => it/its
+ゼア・グロッセ => Zea Grosse => it/its
+王 => King => he/him
+王都西通り => Royal Capital West Street => it/its
+アアアアルト様 => Aaaruto-sama => he/him
+盗賊 => Thief => it/its
+黒魔道士 => Black Mage => it/its
+剣士 => Swordsman => it/its
+修道士 => Monk => it/its
+想い人 => Beloved => it/its
+剣士マーミャ => Swordswoman Marmya => she/her
+ユリィ様 => Yurii-sama => she/her
+リン様 => Rin-sama => she/her
+ルート様 => Route-sama => he/him
+レイ様 => Rei-sama => she/her
+所有物 => Property => it/its
+NTR => NTR => it/its
+Mr ART => Mr. ART => he/him
+妹 => Younger sister => she/her
+フィオトークショー IN 王都城 => Fio Talk Show IN Royal Capital => it/its
+流星魔法(メテオ) => Meteor Magic => it/its
+想い人(アルト) => Beloved (Alto) => he/him
+女性(ヒト) => Woman => she/her
+地球(アルト) => Earth (Alto) => it/its
+幕舎(テント) => Encampment (Tent) => it/its
+流星魔法 => Meteor Magic => it/its
+流星の巫女(フィオ) => Shooting Star Maiden (Fille) => she/her
+BL => Boys' Love => it/its
+Kuriha-san => Kuriha-san => she/her
+Hall of Audience => Hall of Audience => it/its
+King => King => he/him
+Magic reaction => Magic reaction => it/its
+Northeast => Northeast => it/its
+Meteor magic => Meteor magic => it/its
+Marquis Zast Grey => Marquis Zast Grey => he/him
+Grey Family => Grey Family => it/its
+Maou-gun => Demon Army => it/its
+Meteor Maiden => Meteor Maiden => she/her
+Hero => Hero => he/him
+ロルバック => Rollback => he/him
+魔王様 => Demon Lord => he/him
+龍族 => Dragon Clan => they/them
+ブラウニー => Brownie => it/its
+4人娘 => The Four Daughters => they/them
+天元は我の定めに従わん 星砕き(スターブレイク) => The firmament obeys my destiny... Starbreak! => it/its
+エクス・ヒール => Ex Heal => it/its
+南無三 => Namu Amida Butsu (Homage to Amitābha Buddha) => it/its
+魔族領 => Demon Realm => it/its
+魔公バルトリフ => Duke Bartrif => he/him
+幼女性愛 (ロリコン) => pedophilia => it/its
+子供達 (きぼう) => Children (Hope) => they/them
+裏切りの悪鬼 (バルトリフ) => Betrayal's Devil (Bartlif) => he/him
+勇者ルート殿 => Hero Route-dono => he/him
+精霊術 => Spirit Magic => it/its
+父さん => Father => he/him
+母さん => Mother => she/her
+王都架橋 => Royal Capital Bridge => it/its
+グリコ => Glico (a Japanese food company known for a running pose in its advertisements) => it/its
+初代流星の巫女様 => First Meteor Shrine Maiden -sama => she/her
+リリィの花飾り => Lily Flower Ornament => it/its
+Y字平行移動法 => Y-Shaped Parallel Movement Method => it/its
+エルメ => Elme => she/her
+豪炎のガルド => Gouen no Garudo => he/him
+王宮警備隊 => Royal Guard => it/its
+英雄様 => Hero-sama => he/him
+恋愛対象 => Romantic Interest => it/its
+可愛い娘 => Cute Daughter => she/her
+マスコット => Mascot => it/its
+NTRされた事に興奮する派 => NTR-Excited Faction => they/them
+力ずくでフィオを襲って寝取ってしまえ派 => Fio-Assault-and-Conquer Faction => they/them
+穏健派 => Moderate Faction => they/them
+王都親衛隊 => Royal Capital Guard => it/its
+ラオ => Lao => he/him
+日を改 => Another Day => it/its
+==================================== GLOSSARY END ================================

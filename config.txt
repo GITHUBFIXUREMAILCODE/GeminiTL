@@ -1,9 +1,0 @@
-<<<<<<< Updated upstream
-PROJECT_ID=[Insert Gcloud ProjectID here]
-LOCATION=us-central1
-login_key=[insert novelpia loginhere]
-=======
-PROJECT_ID=Input GOOGLECLOUD PROJECT_ID HERE
-LOCATION=us-central1
-login_key=INSERT NOVELPIA LOGINKEY HERE
->>>>>>> Stashed changes

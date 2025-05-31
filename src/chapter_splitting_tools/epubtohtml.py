@@ -16,24 +16,38 @@ def extract_epub(epub_path: str, output_folder: Path):
     """Extracts the EPUB contents into the specified directory."""
     with zipfile.ZipFile(epub_path, 'r') as epub:
         epub.extractall(output_folder)
-
 def get_xhtml_files(epub_folder: Path):
     """
-    Finds all XHTML files in the extracted EPUB directory and returns them
-    sorted numerically (e.g. chap1.xhtml, chap2.xhtml, ... chap10.xhtml).
+    Returns XHTML files in spine order based on the EPUB's content.opf file.
     """
-    xhtml_files = list(epub_folder.rglob("*.xhtml"))
-    
-    def numeric_sort_key(path_obj):
-        # Splits the file stem into digit and non-digit parts.
-        # Example: "chapter10" => ["chapter", "10", ""]
-        return [
-            int(segment) if segment.isdigit() else segment.lower()
-            for segment in re.split(r'(\d+)', path_obj.stem)
-        ]
-    
-    xhtml_files.sort(key=numeric_sort_key)
-    return xhtml_files
+    content_opf = next(epub_folder.rglob("content.opf"), None)
+    if not content_opf:
+        raise FileNotFoundError("content.opf not found in EPUB.")
+
+    with open(content_opf, "r", encoding="utf-8") as f:
+        soup = bs4.BeautifulSoup(f, "lxml-xml")
+
+    # 1. Build ID-to-href map from <manifest>
+    id_href_map = {
+        item['id']: item['href']
+        for item in soup.find_all("item")
+        if item.has_attr('id') and item.has_attr('href') and item['href'].endswith('.xhtml')
+    }
+
+    # 2. Build spine order list from <itemref>
+    spine_ids = [itemref['idref'] for itemref in soup.find_all("itemref") if itemref.has_attr('idref')]
+
+    # 3. Resolve full paths based on manifest and spine order
+    opf_base = content_opf.parent
+    ordered_paths = []
+    for item_id in spine_ids:
+        href = id_href_map.get(item_id)
+        if href:
+            full_path = (opf_base / href).resolve()
+            if full_path.exists():
+                ordered_paths.append(full_path)
+
+    return ordered_paths
 
 def clean_html(content: str) -> str:
     """

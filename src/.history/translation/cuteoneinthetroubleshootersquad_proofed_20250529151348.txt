@@ -1,0 +1,611 @@
+==================================== GLOSSARY START ===============================
+```
+쨩 => -chan => she/her
+군 => -kun => he/him
+-san => -san => they/them
+1 Credit => 1 Credit => it/its
+5 Credits => 5 Credits => it/its
+Aisha => Aisha => she/her
+파멸의 아이샤 => Aisha of Destruction => she/her
+아카슈미르 => Akashmi => she/her
+적뢰의 아카슈미르 => Akashmir of the Scarlet Lightning => she/her
+Alaune => Alaune => she/her
+알라우네 => Alaune => she/her
+알비 => Albi => she/her
+Alice => Alice => she/her
+앨리스 쨩 => Alice-chan => she/her
+앨리스 님 => Alice-nim => she/her
+Andreas 11호 => Andreas 11 => it/its
+안드레아스 11호 => Andreas No. 11 => it/its
+적멸 군단 => Annihilation Legion => it/its
+Answer => Answer => she/her
+앤서 => Answer => she/her
+Apprentice => Apprentice => they/them
+Aqua Marina => Aqua Marina => it/its
+아쿠아 마리나 => Aqua Marina => it/its
+Arachne => Arachne => it/its
+아라크네 => Arachne => it/its
+Arc Glaive => Arc Glaive => it/its
+대마법사의 오브 => Archmage's Orb => it/its
+Armarium => Armarium => it/its
+아르마리움 => Armarium => it/its
+아티팩트 => Artifact => it/its
+AI => Artificial Intelligence => it/its
+아룡 => Aryong => it/its
+Assistant => Assistant => she/her
+Balak => Balak => he/him
+발락 => Balak => he/him
+백수 군단 => Beast Legion => it/its
+수인이 => Beastmen => they/them
+Beastperson => Beastperson => they/them
+Belmond => Belmond => it/its
+벨몬드 => Belmond => it/its
+벨몬드 사건 => Belmond Incident => it/its
+베르드 => Berd => he/him
+베스 => Bess (nickname for Vespera) => she/her
+Betty => Betty => she/her
+베티 => Betty => she/her
+Beyond the Metafuture => Beyond the Metafuture => it/its
+비욘드 더 메타퓨처 => Beyond the Metafuture => it/its
+조인족 => Bird People => they/them
+Black Blood Society => Black Blood Society => it/its
+흑발 => Black Hair => it/its
+Black Hand Society => Black Hand Society => it/its
+Black Raven => Black Raven => he/him
+까망이 => Blacky => it/its
+혈마법 => Blood Magic => it/its
+Blood Night Incident => Blood Night Incident => it/its
+피의 밤 사태 => Blood Night Incident => it/its
+Bloody Pool => Bloody Pool => it/its
+청 팀 => Blue Team => it/its
+Bold => Bold => he/him
+볼드 => Bold => he/him
+Bounty Hunter => Bounty Hunter => he/him
+Brellun => Brellun => he/him
+브렐런 => Brellun => he/him
+Brennyu => Brennyu => she/her
+브렌뉴 => Brennyu => she/her
+Brugus => Brugus => he/him
+브루거스 => Brugus => he/him
+Brutalis => Brutalis => it/its
+브루탈리스 => Brutalis => it/its
+Calderac => Calderac => it/its
+칼데락 => Calderac => it/its
+제 3 센트럴 공원 => Central Park Third => it/its
+센트럴 광장 => Central Square => it/its
+무영창 마법 => Chantless Magic => it/its
+Cheon => Cheon => it/its
+애장품 => Cherished Item => it/its
+치안본부장 => Chief of Public Safety => she/her
+신의 아이 => Child of God => it/its
+신의 아이 라 => Child of God Ra => it/its
+Chilgeuk => Chilgeuk => they/them
+Chiriru => Chiriru => she/her
+치리루 => Chiriru => she/her
+Chiron => Chiron => he/him
+카이론 => Chiron => he/him
+회로 마법 => Circuit Magic => it/its
+시빌리제이션 3 => Civilization 3 => it/its
+클레어 => Claire => she/her
+당주 님 => Clan Leader => he/him
+Code Orange => Code Orange => it/its
+코드 러너 => Code Runner => it/its
+Codelia => Codelia => it/its
+Colidor Fulminis => Colidor Fulminis => it/its
+총사령관 => Commander-in-Chief => he/him
+총사령관님 => Commander-in-Chief => he/him
+Cookie => Cookie => she/her
+쿠키 씨 => Cookie-ssi => she/her
+Cordria => Cordria => it/its
+Corpse Hound => Corpse Hound => it/its
+콜리도르 풀미니스 => Corridor Fulminis => it/its
+Credit => Credit => it/its
+진홍 => Crimson => it/its
+진홍의 진조 => Crimson True Ancestor => it/its
+크라우드 => Crowd => he/him
+Crowley => Crowley => it/its
+크로울리 => Crowley => it/its
+크로울리 사무소 => Crowley Office => it/its
+크로울리 해결사 사무소 => Crowley Solutions Office => it/its
+프레메레 마누 지간티스 => Crush with a Giant's Hand => it/its
+Cyberspace => Cyberspace => it/its
+전뇌세계 => Cyberspace => it/its
+D => D => he/him or she/her
+Dark Elf => Dark Elf => they/them
+다크엘프 => Dark Elf => they/them
+달링 => Darling => he/him
+David => David => he/him
+데이비드 => David => he/him
+데스 핑거 => Death Finger => it/its
+데스 나이트 => Death Knight => it/its
+Decoy => Decoy => it/its
+디코이 => Decoy => it/its
+Delta => Delta => it/its
+델타 실험장 => Delta Experimentation Grounds => it/its
+Deluxe Chocolate Cornet => Deluxe Chocolate Cornet => it/its
+Demon => Demon => they/them
+데몬 => Demon => they/them
+Different Species => Different Species => they/them
+신성력 => Divine Power => it/its
+Double Number => Double Number => it/its
+더블 넘버 픽서 => Double Number Fixer => it/its
+DR 파이널 리그 => DR Final League => it/its
+Dragon => Dragon => it/its
+Dragon Heart => Dragon Heart => it/its
+드래곤 하트 => Dragon Heart => it/its
+용왕 => Dragon King => he/him
+Dragon Lord => Dragon Lord => he/him
+드래곤 시장님 => Dragon Lord => he/him
+드래곤 슬레이어 => Dragon Slayer => it/its
+Dragonslayer => Dragonslayer => it/its
+Drakel => Drakel => he/him
+Dwarf => Dwarf => they/them
+메아리 => Echo => it/its
+Edmond => Edmond => he/him
+에드몬트 => Edmond => he/him
+검귀의 에드몬트 => Edmond the Sword Demon => he/him
+Edmont => Edmont => he/him
+에고 웨폰 => Ego Weapon => it/its
+엘더 리치 => Elder Lich => it/its
+Elf => Elf => they/them
+엘프 여왕 => Elf Queen => she/her
+비약 => Elixir => it/its
+Elizabeth => Elizabeth => she/her
+엘리자베스 => Elizabeth => she/her
+Elstar => Elstar => it/its
+Enchantress Flare => Enchantress Flare => it/its
+인챈트리스 플레어 => Enchantress Flare => it/its
+Enhanced Human => Enhanced Human => it/its
+Enigma Auction => Enigma Auction => it/its
+에니그마 옥션 => Enigma Auction => it/its
+Estimare => Estimare => it/its
+무병장수 => Eternal Life => it/its
+Ethan => Ethan => he/him
+에단 => Ethan => he/him
+EtherionDarkfeatheredSierranFloraEllisSpectralrizen => EtherionDarkfeatheredSierranFloraEllisSpectralrizen => it/its
+에텔리온다크페더드시어런플로라엘리스스펙트라라이젠 => EtherionDarkfeatheredSierranFloraEllisSpectralrizen => it/its
+Eve => Eve => it/its
+이브 => Eve => it/its
+계약의 눈 => Eye of Contract => it/its
+Fairy => Fairy => they/them
+페어리 => Fairy => it/its
+Film Device => Film Device => it/its
+Fixer => Fixer => they/them
+픽서 협회 => Fixer Association => it/its
+픽서 시험 => Fixer Exam => it/its
+살점을 뜯어먹는 뱀 => Flesh-Eating Snake => it/its
+Sachunwang => Four Heavenly Kings => they/them
+Fox Mask => Fox Mask => it/its
+Fremme => Fremme => she/her
+French => French => it/its
+프렌치 => French => it/its
+풀구르 => Fulgur (Lightning) => it/its
+풀르멘 => Fulmen (Lightning) => it/its
+Gelsup => Gelsup => he/him
+겔슈프 => Gelsup => he/him
+저먼 스플렉스 => German Suplex => it/its
+독일 => Germany => it/its
+Ghost => Ghost => they/them
+Ghoul => Ghoul => it/its
+Gilbert => Gilbert => he/him
+길버트 => Gilbert => he/him
+Goblin => Goblin => they/them
+고블린 가면 => Goblin Mask => it/its
+금은보화 => Gold and Silver Treasures => it/its
+Grappling Hook => Grappling Hook => it/its
+Gray Manister => Gray Manister => it/its
+그레이 매니스터 => Gray Manister => it/its
+대마법사 => Great Mage => he/him
+대전사 오크 => Great Warrior Orc => they/them
+Greg => Greg => he/him
+Greg Bisk => Greg Bisk => he/him
+Guidance Counselor => Guidance Counselor => he/him
+Gum Gui => Gum Gui => he/him
+Gyaru => Gyaru => she/her
+갸루 => Gyaru (Gal) => she/her
+Gyeongnyong => Gyeongnyong => it/its
+경룡 => Gyeongryong (a fictional gambling game) => it/its
+경룡 경주 => Gyeongryong Race => it/its
+Hairband => Hairband => it/its
+Hairpin => Hairpin => it/its
+반가면 => Half Mask => it/its
+Halfling => Halfling => they/them
+Halo Magazine => Halo Magazine => it/its
+선도부장 => Head of Discipline => he/him
+Heihachi => Heihachi => he/him
+Hell Toad => Hell Toad => it/its
+Heroine => Heroine => she/her
+Hexahemia => Hexahemia => it/its
+헥사헤미아 혈청 => Hexahemia Serum => it/its
+헥사헤미아 증후군 => Hexahemia Syndrome => it/its
+Hideout => Hideout => it/its
+하이드아웃 => Hideout => it/its
+하이 리치 => High Lich => it/its
+히메컷 => Hime Cut (a Japanese hairstyle) => it/its
+홀로그라마 => Holograma => it/its
+환상 팔찌 => Illusion Bracelet => it/its
+환상 대련 => Illusion Sparring => it/its
+In Copinum Condere => In Copinum Condere => it/its
+Incantationless => Incantationless => it/its
+이종족 해방군 => Interracial Liberation Army => it/its
+Interspecies Liberation Army => Interspecies Liberation Army => it/its
+Invader => Invader => it/its
+인베이더 => Invader => they/them
+인베이더 파편 => Invader Fragment => it/its
+Invidia => Invidia => it/its
+인비디아 => Invidia => it/its
+이레즈미 => Irezumi => it/its
+철호웅권법 => Iron Bear Fist => it/its
+Jane Smith => Jane Smith => she/her
+제인 스미스 => Jane Smith => she/her
+Japan => Japan => it/its
+와풍 => Japanese-style => it/its
+Jason => Jason => he/him
+Jellybean => Jellybean => she/her
+젤리빈 => Jellybean => she/her
+Jeokroe => Jeokroe => it/its
+Jin => Jin => he/him
+진 => Jin => he/him
+Jin Crowley => Jin Crowley => he/him
+진 크로울리 => Jin Crowley => he/him
+진 씨 => Jin-ssi => he/him
+Kachusa => Kachusa => it/its
+Karen => Karen => she/her
+카렌 => Karen => she/her
+Kentrum Satellitis => Kentrum Satellitis => it/its
+켄트룸 사텔리티스 => Kentrum Satellitis => it/its
+Kimono => Kimono => it/its
+나이트 위크 => Knight Week => it/its
+Kobold => Kobold => they/them
+Kraudeu => Kraudeu => he/him
+kun => -kun => he/him
+Kuuung => Kuuung => it/its
+Kyle => Kyle => he/him
+카일 => Kyle => he/him
+Labyrinth => Labyrinth => it/its
+Lakia Olivier => Lakia Olivier => she/her
+레몬 => Lemon => it/its
+Lenta Depositio Putredinis => Lenta Depositio Putredinis => it/its
+Leviathan => Leviathan => it/its
+레비아탄 => Leviathan => it/its
+Lexi => Lexi => she/her
+렉시 => Lexi => she/her
+렉시나 => Lexina => she/her
+Lexina Raven => Lexina Raven => she/her
+```
+Liberation Army => Liberation Army => they/them
+Libra => Libra => it/its
+Libra Station => Libra Station => it/its
+라이브라 역 => Libra Station => it/its
+리치 => Lich => it/its
+Lily => Lily => she/her
+릴리 => Lily => she/her
+릴리 님 => Lily-nim => she/her
+Lisa => Lisa => she/her
+리사 => Lisa => she/her
+Liz => Liz => she/her
+리즈 선배님 => Liz-senpai => she/her
+Lizard Beastman => Lizard Beastman => he/him
+로버트 경 => Lord Robert => he/him
+템페스트 님 => Lord Tempest => he/him
+Luke => Luke => he/him
+루크 => Luke => he/him
+루크세리온 => Luke Serion => he/him
+Lydia => Lydia => she/her
+리디아 => Lydia => she/her
+미친개 파라 => Mad Dog Phara => she/her
+매직미러 => Magic Mirror => it/its
+Maid Outfit => Maid Outfit => it/its
+주신 => Main God => he/him
+마마 => Mama => it/its
+Mana => Mana => it/its
+마력 황무지 => Mana Wasteland => it/its
+매니저 => Manager => he/him
+Manmajeon => Manmajeon => it/its
+Mano => Mano => they/them
+마노 => Mano => they/them
+맥시마이즈드 => Maximized => it/its
+맥시마이즈드 아이돌 => Maximized Idol => it/its
+Meari => Meari => she/her
+Mega Bright => Mega Bright => it/its
+메가 브라이어트 => Mega Bright => it/its
+멘헤라 => Menhera (Japanese slang for someone with mental health issues) => they/them
+Mercenary King => Mercenary King => he/him
+어인 => Merman => it/its
+Metacity => Metacity => it/its
+Metahuman => Metahuman => they/them
+Midnight Airport => Midnight Airport => it/its
+미드나이트 공항 => Midnight Airport => it/its
+아가씨 => Milady => she/her
+Mingling => Mingling => she/her
+밍링 => Mingling => she/her
+Minotaur => Minotaur => he/him
+미노타우로스 => Minotaur => he/him
+Mira Valentia => Mira Valentia => she/her
+미라 발렌티아 => Mira Valentia => she/her
+Mira Valentine => Mira Valentine => she/her
+미라 발렌타인 => Mira Valentine => she/her
+유리아 양 => Miss Yuria => she/her
+Mist => Mist => she/her
+미스트 => Mist => she/her
+Mochi => Mochi => it/its
+모찌 => Mochi => it/its
+Mont Blanc => Mont Blanc => it/its
+몽블랑 => Mont Blanc => it/its
+Morte => Morte => he/him
+모르테 => Morte => he/him
+병독의 모르테 => Morte of Pestilence => he/him
+모르테 님 => Morte-nim => he/him
+Moses => Moses => he/him
+Mr Greg => Mr Greg => he/him
+Mr Victor => Mr Victor => he/him
+Murmur => Murmur => he/him
+무르무르 => Murmur => he/him
+Myriad Flying Flowers => Myriad Flying Flowers => it/its
+Nastrond => Nastrond => it/its
+나스트론드 => Nastrond => it/its
+국보 => National Treasure => it/its
+Necromancer => Necromancer => they/them
+Neia => Neia => she/her
+Nemesis => Nemesis => it/its
+네메시스 => Nemesis => it/its
+네메시스 사 => Nemesis Company => it/its
+Nemesis Corp => Nemesis Corp => it/its
+네오 세파라 모드 => Neo Sephara Mode => it/its
+Nera => Nera => she/her
+네라 => Nera => she/her
+신인류 => New Human => it/its
+Nexus => Nexus => it/its
+Nexus Project => Nexus Project => it/its
+넥서스 프로젝트 => Nexus Project => it/its
+Night of Blood => Night of Blood => it/its
+Nighthaiven => Night Haven => it/its
+Nighthaiven Royal Stadium => Nighthaiven Royal Stadium => it/its
+나이트헤이븐 로얄 스타디움 => Night Haven Royal Stadium => it/its
+Night Week => Night Week => it/its
+님 => -nim => it/its
+Niyahahhat => Niyahahhat => it/its
+니햐하핫 => Niyahahhat => it/its
+Noble Vampire => Noble Vampire => they/them
+노블 뱀파이어 드라켈 => Noble Vampire Drakel => he/him
+오브젝트 => Object => it/its
+Oculia => Oculia => it/its
+오큘리아 => Oculia => it/its
+오거 => Ogre => they/them
+오니 => Ogre => it/its
+Olbius => Olbius => she/her
+비탄의 올비스 => Olbius of Grief => she/her
+올비스 님 => Olbius-nim => she/her
+Olive => Olive => he/him
+올리브 씨 => Olive-ssi => he/him
+Olvis => Olvis => she/her
+광학미채 => Optical Camouflage => it/its
+오브 => Orb => it/its
+Orbis => Orbis => he/him
+올비스 니이이임 => Orbissama => he/him
+Orc => Orc => they/them
+Orc Warlord => Orc Warlord => he/him
+이세계 => Otherworld => it/its
+만마전 => Palace of All Demons => it/its
+알바생 => Part-timer => they/them
+Peacekeeper => Peacekeeper => he/him
+피스키퍼 => Peacekeeper => he/him
+피넛 크런치 버거 => Peanut Crunch Burger => it/its
+페네트레이트 탄 => Penetrate Bullet => it/its
+Peulgureu => Peulgureu => it/its
+Phara => Phara => she/her
+Pioneer => Pioneer => it/its
+파이오니아 => Pioneer => it/its
+플라즈마 => Plasma => it/its
+프레메 => Prem => she/her
+Premere Manu Gigantis => Premere Manu Gigantis => it/its
+프리미어 스위트 => Premier Suite => it/its
+해결사 사무소 => Problem Solver Office => it/its
+Prokella => Prokella => it/its
+프로켈라 => Prokella => it/its
+Psychokinesis => Psychokinesis => it/its
+Pulreumen => Pulreumen => it/its
+퍼플리안 => Purplian => it/its
+인 코피눔 콘데레 => Put the Opponent in a Coffin => it/its
+Queen's Impious Tiara => Queen's Impious Tiara => it/its
+여왕의 불경한 티아라 => Queen's Unholy Tiara => it/its
+La => Ra => it/its
+Ra => Ra => it/its
+Rafina => Rafina => she/her
+Rag Ghost => Rag Ghost => it/its
+라키아 올리비에 => Rakia Olivier => she/her
+라피나 => Rapina => she/her
+Raven => Raven => he/him
+레이븐 님 => Raven-nim => he/him
+붉은 벼락 => Red Lightning => it/its
+적야차 => Red Night Demon => he/him
+적야차 사쿠라기 렌지 => Red Night Yaksha Sakuragi Renji => he/him
+적 팀 => Red Team => it/its
+Reine => Reine => she/her
+레이네 => Reine => she/her
+레이네 언니 => Reine older sister => she/her
+Ren => Ren => she/her
+렌 => Ren => she/her
+렌지 => Renji => he/him
+렌타 데포지티오 푸트레디니스 => Renta Depositio Putredinis => it/its
+금제 마법 => Restriction Magic => it/its
+Reverse Mountain => Reverse Mountain => it/its
+리버스마운틴 => Reverse Mountain => it/its
+Ross => Ross => he/him
+로얄 스위트 => Royal Suite => it/its
+Rurika => Rurika => she/her
+루리카 => Rurika => she/her
+Sabrina => Sabrina => she/her
+사브리나 => Sabrina => she/her
+사브리나 그레이로드 => Sabrina Grayroad => she/her
+성물 => Sacred Object => it/its
+Saint Maria => Saint Maria => it/its
+세인트마리아 => Saint Maria => it/its
+Saint Maria Hotel => Saint Maria Hotel => it/its
+Sakuragi Alice => Sakuragi Alice => she/her
+사쿠라기 가문 => Sakuragi Family => it/its
+Sakuragi Lily => Sakuragi Lily => she/her
+사쿠라기 릴리 => Sakuragi Lily => she/her
+사쿠라기 렌지 => Sakuragi Renji => he/him
+Sayoko => Sayoko => she/her
+사요코 => Sayoko => she/her
+세계수의 씨앗 => Seed of the World Tree => it/its
+Sephara => Sephara => she/her
+세파라 => Sephara => she/her
+세리아 => Seria => she/her
+칠대악 => Seven Deadly Sins => it/its
+칠극 => Seven Extremes => they/them
+칠극 친위대 => Seven Extremes Imperial Guard => they/them
+칠극의 친위대 => Seven Extremes Imperial Guard => they/them
+Seven Great Evils => Seven Great Evils => it/its
+샤룽 => Sharong => she/her
+Sharung => Sharung => she/her
+시로코 => Shiroko => she/her
+실바리엔의 달빛 => Silvarien's Moonlight => it/its
+Silvariens Moonlight => Silvarien's Moonlight => it/its
+실버캣 => Silver Cat => she/her
+싱글 넘버 픽서 => Single Number Fixer => they/them
+Skeleton => Skeleton => it/its
+스켈레톤 => Skeleton => it/its
+Sky Garden => Sky Garden => it/its
+하늘 정원 => Sky Garden => it/its
+Slime => Slime => it/its
+Snake => Snake => it/its
+스네이크 => Snake => it/its
+Spatha Osseum => Spatha Osseum => it/its
+스파타 오시움 => Spatha Osium => it/its
+특수 3팀 => Special Team 3 => it/its
+ssi => -ssi => it/its
+세인트마리아 호텔 => St. Maria Hotel => it/its
+스토커 => Stalker => it/its
+Stardust Comet => Stardust Comet => it/its
+스타더스트 코멧 => Stardust Comet => it/its
+Starlight Highway => Starlight Highway => it/its
+스타라이트 하이웨이 => Starlight Highway => it/its
+폭풍룡 => Storm Dragon => it/its
+스튜디오 => Studio => it/its
+Subadult => Subadult => it/its
+서큐버스 => Succubus => she/her
+Sukiyaki => Sukiyaki => it/its
+스키야키 => Sukiyaki => it/its
+검귀 => Sword Demon => he/him
+검성 => Sword Saint => he/him
+Tamamo => Tamamo => she/her
+타마모 => Tamamo => she/her
+Tara => Tara => she/her
+타라 => Tara => she/her
+Tarzan => Tarzan => he/him
+Tempest => Tempest => they/them
+템페스트 => Tempest => he/him
+단말기 => Terminal => it/its
+Tesseract => Tesseract => it/its
+테서랙트 => Tesseract => it/its
+인터넷 세상에도 유령이 산다 => There are Ghosts in the Internet World => it/its
+TS => Transgender => it/its
+목인 => Treant => it/its
+나무 정령 => Tree Spirit => they/them
+트리거스 => Triggers => it/its
+Triggerse => Triggerse => it/its
+Triple Number => Triple Number => it/its
+트리플 넘버 픽서 => Triple Number Fixer => it/its
+Tropical Oasis => Tropical Oasis => it/its
+트로피컬 오아시스 => Tropical Oasis => it/its
+True Ancestor => True Ancestor => they/them
+진조 => True Ancestor => she/her
+진혈안 => True Blood Eye => it/its
+Tsar Bomba => Tsar Bomba => it/its
+차르 봄바 => Tsar Bomba => it/its
+츤데레 => Tsundere => it/its
+Twins => Twins => they/them
+트윈즈 => Twins => they/them
+프랭크 아저씨 => Uncle Frank => he/him
+언데드 => Undead => they/them
+불사 군단 => Undead Legion => it/its
+불경한 티아라 => Unholy Tiara => it/its
+Urakan => Urakan => he/him
+우라칸 => Urakan => he/him
+Vampire => Vampire => it/its
+흡혈귀 => Vampire => they/them
+Vampire Noble => Vampire Noble => he/him
+Vampire Vespera => Vampire Vespera => she/her
+뱀파이어 베스페라 => Vampire Vespera => she/her
+Verita => Verita => she/her
+베리타 => Verita => she/her
+VIP => Very Important Person => they/them
+Vespera => Vespera => she/her
+베스페라 => Vespera => she/her
+부회장 군 => Vice President-kun => he/him
+Vice President kun => Vice President-kun => he/him
+Victor => Victor => he/him
+VR => Virtual Reality => it/its
+Vita => Vita => she/her
+비타 => Vita => she/her
+Vita Berta => Vita Berta => she/her
+Vita Sisters => Vita Sisters => they/them
+```
+비타 자매 => Vita Sisters => they/them
+Wafu => Wafu => it/its
+와풍 => Wafu => it/its
+Wang Qian => Wang Qian => she/her
+Wang Wei => Wang Wei => he/him
+워치 => Watch => it/its
+Werewolf => Werewolf => he/him
+웨어울프 => Werewolf => he/him
+West Labyrinth => West Labyrinth => it/its
+Western Labyrinth => Western Labyrinth => it/its
+Whipan => Whipan => it/its
+휘판 => Whipan => it/its
+백 팀 => White Team => it/its
+하양이 => Whity => it/its
+World Tree => World Tree => it/its
+World Tree Seed => World Tree Seed => it/its
+세계수의 씨앗 => World Tree Seed => it/its
+X => X => he/him
+Yanagi Tamamo => Yanagi Tamamo => she/her
+야나기 타마모 => Yanagi Tamamo => she/her
+Yeresa => Yeresa => she/her
+예레사 => Yeresa => she/her
+Yuria => Yuria => she/her
+유리아 => Yuria => she/her
+Yuria Crowley => Yuria Crowley => she/her
+유리아 크로울리 => Yuria Crowley => she/her
+유리아 쨩 => Yuria-chan => she/her
+Zhark => Zhark => it/its
+즈하르크 => Zhark => it/its
+Zombie => Zombie => it/its
+괴도 실버캣 => Phantom Thief Silver Cat => she/her
+SNS => Social Networking Service => it/its
+마르코 => Marco => he/him
+나이트헤이븐 => Night Haven => it/its
+레이븐 => Raven => he/him
+앨리스 => Alice => she/her
+협회 본부 => Association Headquarters => it/its
+벤딩 루프 => Bending Loop => it/its
+F2000 => F2000 => it/its
+스카이스크래퍼 => Skyscraper => it/its
+62층 => 62nd Floor => it/its
+푸른빛 플로어 => Azure Floor => it/its
+프라우 => Frau => she/her
+사천왕 => Four Heavenly Kings => they/them
+칠대죄 => Seven Deadly Sins => they/them
+십이지 => Chinese Zodiac => they/them
+사령술사 => Necromancer => he/him
+식물술사 => Plant Manipulator => she/her
+제비꽃 쿠키 => Violet Cookie => it/its
+녹황빛 플로어 => Green-Yellow Floor => it/its
+픽서 랭킹 3위 => Fixer Ranking 3rd => it/its
+하이 엘프 => High Elf => it/its
+섬광의 루크세리온 => Flash of Luxerion => he/him
+회전암석탄 => Rotating Rock Bullet => it/its
+라디우스 => Radius => it/its
+염동력 딱밤 맥스 MK2 => Telekinetic Flick Max MK2 => it/its
+염동력 딱밤 맥스 => Telekinetic Flick Max => it/its
+프라우 씨 => Frau-ssi => she/her
+하몬 => Hamon => it/its
+젤린 => Zelin => she/her
+암부 => Underworld => it/its
+젤린 씨 => Jellin-ssi => she/her
+템페스트 스타디움 => Tempest Stadium => it/its
+지구 => Earth => it/its
+```
+==================================== GLOSSARY END ================================
